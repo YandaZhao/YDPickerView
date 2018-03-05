@@ -5,7 +5,7 @@
 
 效果如下:
 
-<img src="http://zhaoyanda-git.oss-cn-beijing.aliyuncs.com/YDPickerView.gif" width = "375" height = "667" alt="图片名称" align=center />
+<img src="http://zhaoyanda-git.oss-cn-beijing.aliyuncs.com/2018-03-05%2012.50.53.gif" width = "375" height = "667" alt="图片名称" align=center />
 
 ### 导入方法
 只需要把YDPickerView.swift的文件拖入项目即可.
