@@ -5,7 +5,7 @@
 
 效果如下:
 
-![-w375](http://zhaoyanda-git.oss-cn-beijing.aliyuncs.com/YDPickerView.gif)
+![-w275](http://zhaoyanda-git.oss-cn-beijing.aliyuncs.com/YDPickerView.gif)
 
 ### 导入方法
 只需要把YDPickerView.swift的文件拖入项目即可.
