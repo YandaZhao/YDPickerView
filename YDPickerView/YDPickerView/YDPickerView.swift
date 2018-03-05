@@ -35,6 +35,12 @@ private let kTitleFontSize: CGFloat = 18
 
 class YDPickerView: UIPickerView {
     
+    // 弹出动画的类型
+    enum ShowMode {
+        case fade // 渐隐渐现 默认
+        case fromBottom // 从底部弹出
+    }
+    
     /// 这个结构体用于表示当前PickerView的选择状态, 可获取指定component中的row选择index, 也支持更为方便的下标语法获取, 因遵守了Sequence, IteratorProtocol, 同样也支持for in 方式进行遍历
     struct SelectedState: Sequence, IteratorProtocol {
         
@@ -84,9 +90,11 @@ class YDPickerView: UIPickerView {
     // MARK: - Property
     private unowned var targetView: UIView
     private var componentCount = 0
+    private var animationMode = ShowMode.fade
     private var numbeOfRowsInComponentClosure: ((Int) -> Int)?
     private var titleForIndexPathClosure: (((Int, Int)) -> String)?
     private var completeClosure: ((SelectedState) -> Void)?
+    private var didScrollClosure: ((SelectedState) -> Void)?
     private var data: [[String]]? {
         didSet {
             componentCount = data!.count
@@ -221,34 +229,72 @@ class YDPickerView: UIPickerView {
         return self
     }
     
+    /// 点击确定后的回调
     @discardableResult func complete(_ closure: @escaping (SelectedState) -> Void) -> YDPickerView {
         completeClosure = closure
         return self
     }
     
+    /// 监听PickerView滚动的回调
+    @discardableResult func addScrollObserver(_ closure: @escaping (SelectedState) -> Void) -> YDPickerView {
+        didScrollClosure = closure
+        return self
+    }
+    
+    /// 设置动画模式
+    @discardableResult func setAnimationMode(_ mode: ShowMode) -> YDPickerView {
+        self.animationMode = mode
+        return self
+    }
+    
+        
     // MARK: - ActionEvent
     /// 展示PicerView
     private func show() {
+
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()) {
         
-        backgroundView.alpha = 0
-        targetView.addSubview(backgroundView)
+            switch self.animationMode {
+            case .fade:
+                fadeModeShow()
+            case .fromBottom:
+                fromBottomModeShow()
+            }
+        }
         
-        UIView.animate(withDuration: 0.3, animations: { [unowned self] in
+        func fadeModeShow() {
+            self.backgroundView.alpha = 0
+            self.targetView.addSubview(self.backgroundView)
             
-            self.backgroundView.alpha = 1
+            UIView.animate(withDuration: 0.25, animations: { [unowned self] in               self.backgroundView.alpha = 1
+                }, completion: nil)
+        }
+        
+        func fromBottomModeShow() {
+            self.backgroundView.backgroundColor = UIColor.clear
+            let yOffset = kPickerViewHeight + kBottomHeight + kToolBarHeight
+            self.transform = CGAffineTransform(translationX: 0, y: yOffset)
+            self.toolBar.transform = CGAffineTransform(translationX: 0, y: yOffset)
+            self.targetView.addSubview(self.backgroundView)
             
-            }, completion: nil)
+            UIView.animate(withDuration: 0.25, animations: { [unowned self] in
+                self.transform = CGAffineTransform.identity
+                self.toolBar.transform = CGAffineTransform.identity
+                self.backgroundView.backgroundColor = UIColor(white: 0, alpha: 0.2)
+                }, completion: nil)
+        }
+        
     }
-    
+
     /// 关闭PickerView
     func close() {
-        
+
         UIView.animate(withDuration: 0.25, animations: { [unowned self] in
             self.backgroundView.alpha = 0
         }) { [unowned self](_) in
             self.removeFromSuperview()
             self.backgroundView.removeFromSuperview()
-        }
+        }   
     }
     
     @objc private func completeBtnClick() {
@@ -281,6 +327,11 @@ extension YDPickerView: UIPickerViewDelegate, UIPickerViewDataSource {
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         
         return data?[component].count ?? numbeOfRowsInComponentClosure?(component) ?? 0
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        
+        didScrollClosure?(currentSelectedState)
     }
     
     func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
