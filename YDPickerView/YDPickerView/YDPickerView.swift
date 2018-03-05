@@ -120,6 +120,12 @@ class YDPickerView: UIPickerView {
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(backgroundViewTap)))
         return view
     }()
+    /// 适配iPhoneX的BottomView
+    private lazy var bottomView: UIView = {
+        let bottomView = UIView(frame: CGRect(x: 0, y: targetView.bounds.height - kBottomHeight, width: kScreenWidth, height: kBottomHeight))
+        bottomView.backgroundColor = kPickerViewBackgroundColor
+        return bottomView
+    }()
     
     /// 工具条
     private lazy var toolBar: UIToolbar = {
@@ -206,8 +212,7 @@ class YDPickerView: UIPickerView {
         backgroundView.addSubview(self)
         
         if kBottomHeight != 0 {
-            let bottomView = UIView(frame: CGRect(x: 0, y: targetView.bounds.height - kBottomHeight, width: kScreenWidth, height: kBottomHeight))
-            bottomView.backgroundColor = kPickerViewBackgroundColor
+            
             backgroundView.addSubview(bottomView)
         }
         
@@ -275,11 +280,13 @@ class YDPickerView: UIPickerView {
             let yOffset = kPickerViewHeight + kBottomHeight + kToolBarHeight
             self.transform = CGAffineTransform(translationX: 0, y: yOffset)
             self.toolBar.transform = CGAffineTransform(translationX: 0, y: yOffset)
+            self.bottomView.transform = CGAffineTransform(translationX: 0, y: yOffset)
             self.targetView.addSubview(self.backgroundView)
             
             UIView.animate(withDuration: 0.25, animations: { [unowned self] in
                 self.transform = CGAffineTransform.identity
                 self.toolBar.transform = CGAffineTransform.identity
+                self.bottomView.transform = CGAffineTransform.identity
                 self.backgroundView.backgroundColor = UIColor(white: 0, alpha: 0.2)
                 }, completion: nil)
         }
