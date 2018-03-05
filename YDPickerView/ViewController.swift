@@ -29,7 +29,25 @@ class ViewController: UIViewController {
     
     @IBAction func btnClick1(_ sender: Any) {
         
-        YDPickerView.showPickerView(targetView: self.view, dataSource: data).setAnimationMode(.fromBottom)
+        YDPickerView.showPickerView(targetView: self.view, dataSource: data).complete { (selectedState) in
+            
+            // 确定按钮点击回调
+            // 闭包中传入了一个YDPickerView.SelectedState类型的参数, 是一个结构体.在这里命名为 selectedState, 主要作用是描述当前pickerView的选择状态
+            
+            // 获取指定component的选中row的下标, component的下标从零开始.
+            let index1 = selectedState.selectedRow(inComponent: 2)
+            print("第2列中选中了第 \(index1) 行")
+            
+            // 如果你觉得上面的写法有些复杂, 那么你可以这么写, 效果是一样的.
+            let index2 = selectedState[2]
+            print("第2列中选中了第 \(index2) 行")
+            
+            // 如果你想获取所有的列的选择状态, selectedState还支持 for in 遍历
+            for selectedIndex in selectedState{
+                print("第 \(selectedIndex.component) 列中选中了第 \(selectedIndex.row) 行")
+            }
+            
+        }
         
         /*
          
