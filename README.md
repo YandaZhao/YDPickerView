@@ -5,7 +5,7 @@
 
 效果如下:
 
-![-w275](http://zhaoyanda-git.oss-cn-beijing.aliyuncs.com/YDPickerView.gif)
+<img src="http://zhaoyanda-git.oss-cn-beijing.aliyuncs.com/YDPickerView.gif" width = "375" height = "667" alt="图片名称" align=center />
 
 ### 导入方法
 只需要把YDPickerView.swift的文件拖入项目即可.
