@@ -1,5 +1,5 @@
 # YDPickerView
-一行代码完成`PickerView`的展示
+一行代码完成`PickerView`的展示, 适配iPhone X, 基于Swift4.0编写
 
 最近一直在写项目, 总会用到`UIPickerView`, 但是每次都要设置`DataSource`和`Delegate`非常的烦躁, 非常简单的选择功能加上动画需要写二三百行代码, 代码也是大同小异, 所以把这一功能封装起来, 一行代码完成`PickerView`的展示(这行代码可能有点长:-)), 数据, 标题, 和监听. 
 
@@ -102,6 +102,6 @@ private let kTitleFontSize: CGFloat = 18
 
 如果用的还可以, 别忘了给我`Star`哦 :-)
 
-
+如果你对我的技术感兴趣, 可以访问我的个人网站 <a href="http://www.zhaoyanda.com">www.zhaoyanda.com</a>
 
 

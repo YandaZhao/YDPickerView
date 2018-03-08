@@ -46,9 +46,8 @@ class ViewController: UIViewController {
             for selectedIndex in selectedState{
                 print("第 \(selectedIndex.component) 列中选中了第 \(selectedIndex.row) 行")
             }
-            
-        }
-        
+                
+        }        
         /*
          
         YDPickerView.showPickerView(targetView: self.view, dataSource: data).complete { (selectedState) in
